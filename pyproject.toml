@@ -1,0 +1,26 @@
+
+[project]
+name = "BookReviewsApi"
+author = [{name = "Ayda Sholani", email = "ayda.sholani@gmail.com"}]
+version = "1.0.0"
+description = "Book reviews api and database"
+readme = "README.md"
+dependencies = [
+    "flask",
+]
+
+[project.optional-dependencies]
+test = ["pytest"]
+
+[build-system]
+requires = ["flit_core<4"]
+build-backend = "flit_core.buildapi"
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+filterwarnings = ["error"]
+
+[tool.coverage.run]
+branch = true
+source = ["BookReviewsApi", "tests"]
