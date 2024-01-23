@@ -2,6 +2,7 @@ import os
 from flask import Flask, jsonify, request
 from . import db_conn
 
+
 # Create flask app
 def create_app(test_config=None):
     app = Flask(__name__, instance_relative_config=True)
@@ -23,6 +24,7 @@ def create_app(test_config=None):
     app.add_url_rule("/", endpoint="index")
 
     return app
+
 
 # Flask app configuration
 def configure_app(app, test_config):

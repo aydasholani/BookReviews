@@ -26,3 +26,8 @@ $ flask run --debug
 ```bash
 $ pytest
 ```
+# Testing optional
+```bash
+$ coverage run -m python
+$ coverage html
+```

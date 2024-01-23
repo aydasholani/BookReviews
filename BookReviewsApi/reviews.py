@@ -1,10 +1,10 @@
-
 from functools import wraps
 from flask import Blueprint, request, jsonify
 from .models import Book, Review, print_post_requests, db
 
 bp = Blueprint("reviews", __name__)
 
+# Hämta alla reviews
 @bp.route("/", methods=["GET"])
 def get_reviews():
     try:
@@ -12,7 +12,10 @@ def get_reviews():
         reviews_data = [review.as_dict() for review in reviews]
         return jsonify(reviews_data), 200
     except Exception as e:
-        return jsonify({"message": "Failed to get reviews.", "error": str(e)}), 500
+        return (
+            jsonify({"message": "Failed to get reviews.", "error": str(e)}),
+            500,
+        )
 
 
 @bp.route("/<int:book_id>", methods=["GET", "POST"])
@@ -21,6 +24,7 @@ def handle_reviews(book_id):
         return get_reviews_single_book(book_id)
     elif request.method == "POST":
         return create_review(book_id)
+
 
 # Hämta alla review för en bok
 def get_reviews_single_book(book_id):
@@ -31,18 +35,21 @@ def get_reviews_single_book(book_id):
         reviews_data = [review.as_dict() for review in reviews]
         return jsonify(reviews_data), 200
     except Exception as e:
-        return jsonify({"message": "Failed to get reviews.", "error": str(e)}), 500
+        return (
+            jsonify({"message": "Failed to get reviews.", "error": str(e)}),
+            500,
+        )
 
-
-@print_post_requests    
-def create_review(book_id):    
+# Skapa ny review för en bok
+@print_post_requests
+def create_review(book_id):
     data = request.get_json()
     book = Book.query.filter_by(id=book_id).first()
-    
+
     if not book:
         return jsonify({"message": "Book not found"}), 404
 
-    # Check if all required fields are present
+    # Kollar om alla fält är ifyllda
     required_fields = {"username", "rating", "review_text"}
     if not required_fields.issubset(data):
         return jsonify({"message": "Missing required fields"}), 400
@@ -55,4 +62,7 @@ def create_review(book_id):
     except Exception as e:
         db.session.rollback()
         print(e)
-        return jsonify({"message": f"Failed to add review. Reason: {str(e)}"}), 500
+        return (
+            jsonify({"message": f"Failed to add review. Reason: {str(e)}"}),
+            500,
+        )

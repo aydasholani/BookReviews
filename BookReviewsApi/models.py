@@ -5,6 +5,7 @@ from sqlalchemy import func
 
 db = SQLAlchemy()
 
+
 # Scehmas för Book och Review
 class Book(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -45,7 +46,7 @@ class Book(db.Model):
         db.session.delete(self)
         db.session.commit()
         return True
-    
+
     # Function som räknar ut genomsnittliga betyget för boken
     def calculate_avg_rating(self):
         avg_rating = (
@@ -55,14 +56,26 @@ class Book(db.Model):
         )
         avg_rating = round(avg_rating, 2) if avg_rating else 0
         return avg_rating
-    
+
+    # Classmethod för att filtrera och hämta alla böcker
     @classmethod
     def filter_books(cls, title=None, author=None, genre=None):
-        filters = {key: value for key, value in {"title": title, "author": author, "genre": genre}.items() if value}
+        filters = {
+            key: value
+            for key, value in {
+                "title": title,
+                "author": author,
+                "genre": genre,
+            }.items()
+            if value
+        }
 
         try:
             books_query = cls.query.filter(
-                *(getattr(cls, key).ilike(f"%{value}%") for key, value in filters.items())
+                *(
+                    getattr(cls, key).ilike(f"%{value}%")
+                    for key, value in filters.items()
+                )
             )
             books = books_query.all()
 
@@ -70,8 +83,7 @@ class Book(db.Model):
         except Exception as e:
             print(f"An error occurred in filter_books: {e}")
             db.session.rollback()
-            
-        
+
     # En classmethod för att lägga till böcker
     @classmethod
     def add_books(cls, book_data_list):
@@ -83,8 +95,12 @@ class Book(db.Model):
             return new_books
         except Exception as e:
             db.session.rollback()
-            return jsonify({"message": "Failed to add books.", "error": str(e)}), 500
-    
+            return (
+                jsonify({"message": "Failed to add books.", "error": str(e)}),
+                500,
+            )
+
+
 class Review(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String(255), nullable=False)
@@ -98,7 +114,7 @@ class Review(db.Model):
             for column in self.__table__.columns
         }
 
-        # Include a link to the book in the review dictionary
+        # Inkluderar en länk till boken
         if hasattr(self, "book") and self.book:
             review_dict["book_link"] = url_for(
                 "books.handle_single_book",

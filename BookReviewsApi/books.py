@@ -1,6 +1,8 @@
 from flask import Blueprint, current_app, jsonify, request
 from .models import Book, print_post_requests, db
+
 bp = Blueprint("books", __name__)
+
 
 # Route '/books' för att hämta eller lägga till flera böcker
 @bp.route("/", methods=["GET", "POST"])
@@ -23,9 +25,6 @@ def get_books():
     return jsonify(books_data), 200
 
 
-
-
-
 @print_post_requests
 def add_books():
     try:
@@ -45,7 +44,7 @@ def add_books():
 # Route '/books/<int:book_id>'för att hämta, updatera och radera en bok med book_id
 @bp.route("/<int:book_id>", methods=["GET", "PUT", "DELETE"])
 def handle_single_book(book_id):
-    book = Book.query.filter_by(id=book_id).first()    
+    book = Book.query.filter_by(id=book_id).first()
     if request.method == "GET":
         return get_book(book)
     elif request.method == "PUT":
@@ -81,6 +80,7 @@ def update_book(book):
             jsonify({"message": "Failed to update book.", "error": str(e)}),
             500,
         )
+
 
 # Raderar en bok och tillhörande recensioner
 def delete_book(book):

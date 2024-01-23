@@ -1,14 +1,15 @@
-
 from flask import current_app, g, logging
 import click
 import json
 from .models import db, Book, Review
+
 
 # Databas connection
 def get_db():
     if not hasattr(g, "db"):
         g.db = db.engine.connect()
     return g.db
+
 
 # Stänger databasconnection efter varje request
 def close_db(e=None):
@@ -17,7 +18,8 @@ def close_db(e=None):
     if db is not None:
         db.close()
 
-# Initierar databasen 
+
+# Initierar databasen
 @click.command("init-db")
 def init_db():
     db.drop_all()
@@ -34,6 +36,7 @@ def init_db():
 
     db.session.commit()
     print("Database initialization successful.")
+
 
 # Initierar appen, appkontext och lägger till init-db commando
 def init_app(app):
