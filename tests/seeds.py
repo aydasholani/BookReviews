@@ -7,7 +7,6 @@ def seed_test_data(db, Book, Review):
     with current_app.open_resource("data.json") as f:
         data = json.load(f)
 
-    # Add data to the in-memory test database
     for book_data in data.get("books", []):
         book = Book(**book_data)
         db.session.add(book)

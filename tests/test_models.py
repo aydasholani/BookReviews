@@ -7,7 +7,7 @@ def test_book_model():
     assert book.author == "Test Author"
     assert book.genre == "Test Genre"
     assert book.summary == "Test Summary"
-    print("Test Book Model Passed")
+
     
 def test_review_model():
     review = Review(book_id=1, username="Test Username", rating=5, review_text="Test Review Text")
@@ -15,5 +15,5 @@ def test_review_model():
     assert review.username == "Test Username"
     assert review.rating == 5
     assert review.review_text == "Test Review Text"
-    print("Test Review Model Passed")
+
 
