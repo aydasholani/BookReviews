@@ -1,6 +1,10 @@
 # Book Reviews
 - Ayda Sholani
 
+# Create environment
+```bash
+$ python3 -m venv <venv_location>
+```
 # Activate environment
 ```bash
 $ source <venv_name>/Scripts/activate
