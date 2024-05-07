@@ -5,7 +5,7 @@ from . import db_conn
 
 # Create flask app
 def create_app(test_config=None):
-    app = Flask(__name__, instance_relative_config=True)
+    app = Flask(__name__, instance_relative_config=True, port=4500)
     app.json.sort_keys = False
     configure_app(app, test_config)
     register_blueprints(app)
